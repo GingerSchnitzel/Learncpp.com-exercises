@@ -20,38 +20,18 @@ namespace Potion
 		max_potions
 	};
 	constexpr std::array <Type, max_potions> types{ healing, mana, speed, invisibility };
-	constexpr std::array<int, 4> costs{ 20, 30, 12, 50 };
+	constexpr std::array<int32_t, 4> costs{ 20, 30, 12, 50 };
 	const std::array<std::string, max_potions> names{ "healing" , "mana" , "speed" , "invisibility" };
 
-	static void shop()
-	{
-		std::cout << "Here is our selection for today: \n";
-		for (const auto& element : Potion::types)
-		{
-			std::cout << element + 1 << ")" << Potion::names[element] << " costs " << Potion::costs[element] << '\n';
-		}
-	}
+
 
 }
-int32_t randomGold()
-{
-	static std::random_device rd{};                                                 // Random device for seeding the twister
-	static std::seed_seq ss{ rd(), rd(), rd(), rd(), rd(), rd(), rd(), rd() };      // std::seed_seq resolves underseeding issues 
-	static std::mt19937 engine(ss);                                                 // seeding the random engine with the random data
-	static std::uniform_int_distribution<int32_t> dist(80, 120);     // generated random integers withing specified range
-	int32_t generatedGold = dist(engine);                                              // generates a random integer for row
-	// all made static in order not to create objects all over again when function is called
-	return generatedGold;
-}
 
-std::string getName()
-{
-	std::cout << "Enter your name: ";
-	std::string name{};
-	std::getline(std::cin >> std::ws, name);
+int32_t randomGold();
+std::string getName();
+int32_t charToInt(char c);
 
-	return name;
-}
+
 
 class Player
 {
@@ -63,7 +43,7 @@ private:
 
 public:
 	Player() :
-		name{getName()},
+		name{ getName() },
 		gold{ randomGold() },
 		inventory{}
 	{
@@ -78,12 +58,108 @@ public:
 		return inventory[element];
 	}
 
-	void startSession()
+	bool buy(Potion::Type type)
 	{
-		std::cout << "Welcome to Roscoe's potion emporium!\n";
-	
+		if (gold < Potion::costs[type])
+		{
+			return false;
+		}
+
+		gold -= Potion::costs[type];
+		++inventory[type];
+		return true;
+	}
+
+	Potion::Type whichPotion()
+	{
+
+		std::cout << "Enter the number of the potion you'd like to buy, or 'q' to quit: ";
+		char input{};
+		while (true)
+		{
+			std::cin >> input;
+			if (!std::cin)
+			{
+				std::cin.clear(); // put us back in 'normal' operation mode
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				continue;
+			}
+
+
+			if (!std::cin.eof() && std::cin.peek() != '\n')
+			{
+				std::cout << "I didn't understand what you said.  Try again: ";
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				continue;
+			}
+
+			if (input == 'q')
+			{
+				return Potion::max_potions;
+			}
+
+
+			int32_t val{ charToInt(input) };
+			if (val >= 0 && val < Potion::max_potions)
+			{
+				return static_cast<Potion::Type>(val);
+			}
+
+			// It wasn't a valid potion selection
+			std::cout << "I didn't understand what you said.  Try again: ";
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		}
+
+
 
 	}
+
+	void shop()
+	{
+		while (gold > Potion::costs[2])
+		{
+			std::cout << "Here is our shop's selection for today: \n";
+			for (const auto& element : Potion::types)
+			{
+				std::cout << element << ") " << Potion::names[element] << " costs: " << Potion::costs[element] << '\n';
+			}
+		
+			Potion::Type which{ whichPotion() };
+			if (which == Potion::max_potions)
+				return;
+
+			bool success{ buy(which) };
+			if (!success)
+				std::cout << "You can not afford that.\n\n";
+			else
+				std::cout << "You purchased a potion of " << Potion::names[which] << ".  You have " << getGold() << " gold left.\n\n";
+		}
+	}
+
+	void printInventory()
+	{
+		std::cout << "Your inventory contains: \n";
+
+		for (const auto& element : Potion::types)
+		{
+			if (getInventory(element) > 0)
+				std::cout << getInventory(element) << "x potion of " << Potion::names[element] << '\n';
+		}
+
+		std::cout << "You escaped with " << getGold() << " gold remaining.\n";
+	}
+
+	void startSession()
+	{
+
+		std::cout << "Hello, " << name << ", you have " << getGold() << " gold.\n\n";
+		shop();
+		std::cout << '\n';
+		printInventory();
+		std::cout << "\nThanks for shopping at Roscoe's potion emporium!\n";
+
+	}
+
 
 };
 

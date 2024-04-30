@@ -1,34 +1,4 @@
 ﻿  main.cpp
-D:\Programming\VisualStudio\Potions\RoscoePotionEmporium\potion.hpp(12,19): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-  (compiling source file 'main.cpp')
-  
-D:\Programming\VisualStudio\Potions\RoscoePotionEmporium\potion.hpp(12,9): error C2146: syntax error: missing ';' before identifier 'randomGold'
-  (compiling source file 'main.cpp')
-  
   potion.cpp
-D:\Programming\VisualStudio\Potions\RoscoePotionEmporium\potion.hpp(12,19): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-  (compiling source file 'potion.cpp')
-  
-D:\Programming\VisualStudio\Potions\RoscoePotionEmporium\potion.hpp(12,9): error C2146: syntax error: missing ';' before identifier 'randomGold'
-  (compiling source file 'potion.cpp')
-  
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\stdint.h(19,28): error C2378: 'int16_t': redefinition; symbol cannot be overloaded with a typedef
-  (compiling source file 'potion.cpp')
-  D:\Programming\VisualStudio\Potions\RoscoePotionEmporium\potion.hpp(12,1):
-  see declaration of 'int16_t'
-  
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\cstdint(22,25): error C2874: using-declaration causes a multiple declaration of 'int16_t'
-  (compiling source file 'potion.cpp')
-  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\stdint.h(19,28):
-  see declaration of 'int16_t'
-  
-D:\Programming\VisualStudio\Potions\RoscoePotionEmporium\potion.cpp(41,21): warning C4267: 'initializing': conversion from 'size_t' to 'int32_t', possible loss of data
-D:\Programming\VisualStudio\Potions\RoscoePotionEmporium\potion.cpp(73,10): error C2365: 'Player::inventory': redefinition; previous definition was 'data member'
-  D:\Programming\VisualStudio\Potions\RoscoePotionEmporium\potion.cpp(59,43):
-  see declaration of 'Player::inventory'
-  
-D:\Programming\VisualStudio\Potions\RoscoePotionEmporium\potion.cpp(75,3): error C2059: syntax error: 'return'
-D:\Programming\VisualStudio\Potions\RoscoePotionEmporium\potion.cpp(75,28): error C2238: unexpected token(s) preceding ';'
-D:\Programming\VisualStudio\Potions\RoscoePotionEmporium\potion.cpp(78,1): error C2059: syntax error: '}'
-D:\Programming\VisualStudio\Potions\RoscoePotionEmporium\potion.cpp(78,1): error C2143: syntax error: missing ';' before '}'
   Generating Code...
+  RoscoePotionEmporium.vcxproj -> D:\Programming\GitHub\Learncpp.com-exercises\Potions\RoscoePotionEmporium\x64\Debug\RoscoePotionEmporium.exe
