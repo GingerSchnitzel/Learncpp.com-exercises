@@ -34,8 +34,11 @@ public:
 	friend Fraction operator*(const Fraction& f1, const Fraction& f2);
 	friend Fraction operator*(const Fraction& f1, int value);
 	friend Fraction operator*(int value, const Fraction& f1);
-};
 
+
+	friend std::ostream& operator<<(std::ostream& out, const Fraction& f1);
+
+};
 
 Fraction operator*(const Fraction& f1, const Fraction& f2)
 {
@@ -51,6 +54,28 @@ Fraction operator*(int value, const Fraction& f1)
 {
 	return Fraction{ f1 * value };
 }
+
+std::ostream& operator<<(std::ostream& out, const Fraction& f1)
+{
+	out << f1.m_numerator << '/' << f1.m_denominator;
+	return out;
+}
+
+std::istream& operator>>(std::istream& in, Fraction& f1)
+{
+	int numerator{};
+	char ignore{};
+	int denominator{};
+
+	// Overwrite the values of f1
+	in >> numerator >> ignore >> denominator;
+
+	if (in)
+		f1 = Fraction{ numerator, denominator };
+
+	return in;
+}
+
 
 
 int main()
