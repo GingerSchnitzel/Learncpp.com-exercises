@@ -35,8 +35,17 @@ public:
 	friend Fraction operator*(const Fraction& f1, int value);
 	friend Fraction operator*(int value, const Fraction& f1);
 
-
 	friend std::ostream& operator<<(std::ostream& out, const Fraction& f1);
+	friend std::istream& operator>>(std::istream& in, Fraction& f1);
+
+	friend bool operator== (const Fraction& f1, const Fraction& f2);
+	friend bool operator!= (const Fraction& f1, const Fraction& f2);
+
+	friend bool operator< (const Fraction& f1, const Fraction& f2);
+	friend bool operator> (const Fraction& f1, const Fraction& f2);
+
+	friend bool operator<= (const Fraction& f1, const Fraction& f2);
+	friend bool operator>= (const Fraction& f1, const Fraction& f2);
 
 };
 
@@ -76,6 +85,10 @@ std::istream& operator>>(std::istream& in, Fraction& f1)
 	return in;
 }
 
+bool operator== (const Fraction& f1, const Fraction& f2)
+{
+	return (f1.m_numerator == f2.m_numerator) && (f2.m_denominator == f2.m_denominator);
+}
 
 
 int main()
