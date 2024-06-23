@@ -1,5 +1,6 @@
 #include <iostream>
 #include <numeric> 
+#include <vector>
 
 
 class Fraction
@@ -115,8 +116,47 @@ bool operator>= (const Fraction& f1, const Fraction& f2)
 	return !(operator<(f1, f2));
 }
 
+
+struct StudentGrade
+{
+	std::string name{};
+	char grade{};
+};
+
+
+class GradeMap
+{
+private:
+	std::vector<StudentGrade> m_map{};
+
+public:
+	char& operator[] (const std::string& name)
+	{
+		auto found{ std::find_if(m_map.begin(), m_map.end(),
+					[name](const auto& student) { // this is a lambda that captures name from the surrounding scope
+						return (student.name == name); // so we can use name here
+					}) };
+
+		if (found != m_map.end())
+		{
+			return found->grade;
+		}
+
+		// otherwise create a new StudentGrade for this student and add
+		// it to the end of our vector.
+		m_map.emplace_back(std::string{ name }); // C++20
+		//	m_map.push_back(StudentGrade{std::string{name}}); // push_back version
+
+			// and return the element
+		return m_map.back().grade;
+	}
+};
+
+
+
 int main()
 {
+	/*
 	Fraction f1{ 3, 2 };
 	Fraction f2{ 5, 8 };
 
@@ -126,6 +166,14 @@ int main()
 	std::cout << f1 << ((f1 > f2) ? " > " : " not > ") << f2 << '\n';
 	std::cout << f1 << ((f1 <= f2) ? " <= " : " not <= ") << f2 << '\n';
 	std::cout << f1 << ((f1 >= f2) ? " >= " : " not >= ") << f2 << '\n';
+	*/
+	GradeMap grades{};
+
+	grades["Joe"] = 'A';
+	grades["Frank"] = 'B';
+
+	std::cout << "Joe has a grade of " << grades["Joe"] << '\n';
+	std::cout << "Frank has a grade of " << grades["Frank"] << '\n';
 
 	return 0;
 }
