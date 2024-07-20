@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdint>
 #include <cassert>
+#include <algorithm>
 
 class IntArray
 {
@@ -20,10 +21,10 @@ public:
 	}
 
 	IntArray(const IntArray& array)
-		:m_size{ array.m_size }
+		: m_size{ array.m_size }
 	{
 
-		m_array = new int32_t[m_size] {}; //deep copy
+		m_array = new int32_t[m_size]{}; //deep copy
 
 		for (size_t count{ 0 }; count < array.m_size; ++count)
 			m_array[count] = array.m_array[count];
@@ -34,7 +35,7 @@ public:
 		delete[] m_array;
 	}
 
-	friend std::ostream operator<< (std::ostream& out, const IntArray& array)
+	friend std::ostream& operator<< (std::ostream& out, const IntArray& array)
 	{
 		for (int32_t count{}; count < array.m_size; ++count)
 		{
@@ -43,7 +44,28 @@ public:
 		return out;
 	}
 
+	int32_t& operator[] (const size_t index)
+	{
 
+		assert(index >= 0);
+		assert(index < m_size);
+		return m_array[index];
+
+	}
+
+	friend void swap(IntArray& first, IntArray& second)
+	{
+		using std::swap;
+
+		swap(first.m_size, second.m_size);
+		swap(first.m_array, second.m_array);
+	}
+
+	IntArray& operator= (IntArray other)
+	{
+		swap(*this, other);
+		return *this;
+	}
 };
 
 
