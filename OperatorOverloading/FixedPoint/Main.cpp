@@ -1,11 +1,8 @@
 #include <iostream>
 #include <cstdint>
 #include <cassert>
+#include <cmath>
 
-namespace Constants
-{
-	constexpr int8_t overflow{ 99 };
-}
 
 class FixedPoint2
 {
@@ -42,11 +39,32 @@ public:
 		m_fractional = m_fractional % 100;
 	}
 
+	// Delegating constructor so we don't handle negative number and overflow code
+	FixedPoint2 (double number)
+		: FixedPoint2(static_cast<int16_t>(std::trunc(number)), static_cast<int8_t>(std::round(number*100) - std::trunc(number) * 100))
+	{}
+
+
 	explicit operator double() const
 	{
 		return m_nonFractional + (static_cast<double>(m_fractional) / 100);
 	}
 
+	friend bool operator==(const FixedPoint2& fp1, const FixedPoint2& fp2)
+	{
+		return fp1.m_nonFractional == fp2.m_nonFractional && fp1.m_fractional == fp2.m_fractional;
+	}
+
+	FixedPoint2 operator-() const
+	{
+		// We need to cast, because the negative sign (-) converts our
+		// narrow integers types to int.
+		return FixedPoint2
+		{
+			static_cast<std::int16_t>(-m_nonFractional),
+			static_cast<std::int8_t>(-m_fractional)
+		};
+	}
 	friend bool testDecimal(const FixedPoint2& fp)
 	{
 		if (fp.m_nonFractional >= 0)
@@ -61,6 +79,20 @@ std::ostream& operator<< (std::ostream& out, const FixedPoint2& number)
 {
 	out << static_cast<double> (number);
 	return out;
+}
+
+std::istream& operator>>(std::istream& in, FixedPoint2& fp)
+{
+	double d{};
+	in >> d;
+	fp = FixedPoint2{ d };
+
+	return in;
+}
+
+FixedPoint2 operator+(const FixedPoint2& fp1, const FixedPoint2& fp2)
+{
+	return FixedPoint2{ static_cast<double>(fp1) + static_cast<double>(fp2) };
 }
 
 int main()
@@ -82,6 +114,9 @@ int main()
 	FixedPoint2 d{ -1, -104 };
 	assert(static_cast<double>(d) == -2.04);
 	assert(testDecimal(d));
+
+	FixedPoint2 e{ 3, 99 };
+	std::cout << e << '\n';
 
 	return 0;
 }
